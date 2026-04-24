@@ -170,6 +170,68 @@
             </p>
         </div>
 
+        <!-- Search and Filter Section -->
+        <div class="bg-gray-50 rounded-2xl p-8 mb-12 shadow-sm">
+            <form method="GET" action="{{ route('home') }}" class="flex flex-col lg:flex-row gap-6 items-center justify-center">
+                <!-- Search Input -->
+                <div class="flex-1 max-w-md">
+                    <div class="relative">
+                        <input type="text" name="search" value="{{ request('search') }}"
+                               placeholder="Tìm kiếm sản phẩm..."
+                               class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="flex-1 max-w-md">
+                    <select name="category" class="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm appearance-none">
+                        <option value="">Tất cả danh mục</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Search Button -->
+                <div class="flex gap-3">
+                    <button type="submit" class="bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg">
+                        <i class="fas fa-search mr-2"></i>Tìm Kiếm
+                    </button>
+                    @if(request('search') || request('category'))
+                        <a href="{{ route('home') }}" class="bg-gray-500 text-white px-6 py-4 rounded-xl font-semibold hover:bg-gray-600 transition shadow-lg">
+                            <i class="fas fa-times mr-2"></i>Xóa Bộ Lọc
+                        </a>
+                    @endif
+                </div>
+            </form>
+
+            <!-- Active Filters Display -->
+            @if(request('search') || request('category'))
+                <div class="mt-6 flex flex-wrap gap-3 justify-center">
+                    @if(request('search'))
+                        <span class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium">
+                            <i class="fas fa-search"></i>
+                            Tìm: "{{ request('search') }}"
+                        </span>
+                    @endif
+                    @if(request('category'))
+                        @php
+                            $selectedCategory = $categories->where('slug', request('category'))->first();
+                        @endphp
+                        @if($selectedCategory)
+                            <span class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                                <i class="fas fa-tag"></i>
+                                Danh mục: {{ $selectedCategory->name }}
+                            </span>
+                        @endif
+                    @endif
+                </div>
+            @endif
+        </div>
+
         @if(session('success'))
             <div class="bg-green-100 text-green-800 px-6 py-4 rounded-xl mb-8 font-semibold shadow-sm text-center max-w-2xl mx-auto">
                 {{ session('success') }}

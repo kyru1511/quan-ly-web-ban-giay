@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 
 
 // Trang chủ và Giỏ hàng
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
