@@ -95,6 +95,106 @@
         </div>
     </div>
 
+    <div class="mt-8 bg-white rounded-xl shadow-sm p-8 border border-gray-200">
+        <div class="flex items-center justify-between mb-6 border-b pb-4">
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800">Trang chủ & Hero</h3>
+                <p class="text-sm text-gray-600 mt-1">Thay đổi nội dung hero và slide ngay trên admin.</p>
+            </div>
+            <div class="text-sm text-gray-500">Sử dụng để cập nhật nhanh nội dung giới thiệu</div>
+        </div>
+
+        <form action="{{ route('admin.settings.update') }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Dòng quảng cáo nhỏ</label>
+                        <input type="text" name="hero_promo_text" value="{{ old('hero_promo_text', $hero['promo_text'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Tiêu đề chính</label>
+                        <input type="text" name="hero_title" value="{{ old('hero_title', $hero['title'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Từ nhấn mạnh</label>
+                        <input type="text" name="hero_highlight" value="{{ old('hero_highlight', $hero['highlight'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Nội dung phụ</label>
+                        <textarea name="hero_subtitle" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">{{ old('hero_subtitle', $hero['subtitle'] ?? '') }}</textarea>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Nút CTA</label>
+                        <input type="text" name="hero_cta_text" value="{{ old('hero_cta_text', $hero['cta_text'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Link nút CTA</label>
+                        <input type="text" name="hero_cta_link" value="{{ old('hero_cta_link', $hero['cta_link'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Ví dụ: /products hoặc #products">
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                        <p class="text-sm text-gray-600">Lưu ý: Nếu để trống link, nút sẽ dẫn về trang chính.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h4 class="text-xl font-bold text-gray-800 mb-4">Các slide hero</h4>
+                <div class="space-y-6">
+                    @foreach($slides as $index => $slide)
+                        <div class="p-5 rounded-2xl border border-gray-200 bg-gray-50">
+                            <div class="flex items-center justify-between mb-4">
+                                <h5 class="text-lg font-semibold text-gray-800">Slide {{ $index + 1 }}</h5>
+                                <span class="text-sm text-gray-500">Mã {{ $index + 1 }}</span>
+                            </div>
+                            <div class="grid gap-4 lg:grid-cols-2">
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Danh mục</label>
+                                    <input type="text" name="slides[{{ $index }}][category]" value="{{ old('slides.'.$index.'.category', $slide['category'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Nhãn</label>
+                                    <input type="text" name="slides[{{ $index }}][badge]" value="{{ old('slides.'.$index.'.badge', $slide['badge'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Tiêu đề slide</label>
+                                    <input type="text" name="slides[{{ $index }}][title]" value="{{ old('slides.'.$index.'.title', $slide['title'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Mô tả slide</label>
+                                    <input type="text" name="slides[{{ $index }}][subtitle]" value="{{ old('slides.'.$index.'.subtitle', $slide['subtitle'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Nhãn giá</label>
+                                    <input type="text" name="slides[{{ $index }}][price_label]" value="{{ old('slides.'.$index.'.price_label', $slide['price_label'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Giá hiển thị</label>
+                                    <input type="text" name="slides[{{ $index }}][price_value]" value="{{ old('slides.'.$index.'.price_value', $slide['price_value'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
+                                </div>
+                                <div class="lg:col-span-2">
+                                    <label class="block text-gray-700 font-semibold mb-2">Icon CSS</label>
+                                    <input type="text" name="slides[{{ $index }}][icon_class]" value="{{ old('slides.'.$index.'.icon_class', $slide['icon_class'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Ví dụ: fas fa-shoe-prints">
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                    <i class="fas fa-save mr-2"></i>Lưu Nội Dung Trang Chủ
+                </button>
+            </div>
+        </form>
+    </div>
+
     <!-- Quick Actions -->
     <div class="mt-8 bg-blue-50 rounded-lg p-6">
         <h4 class="text-lg font-bold text-blue-800 mb-4">💡 Mẹo sử dụng:</h4>

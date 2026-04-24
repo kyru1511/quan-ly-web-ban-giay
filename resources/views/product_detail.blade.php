@@ -253,38 +253,3 @@
     </div>
 </section>
 @endsection
-                    @endif
-
-                    <form action="{{ route('reviews.store', $product->id) }}" method="POST" class="space-y-4">
-                        @csrf
-                        <div>
-                            <label class="block text-indigo-900 font-semibold mb-1">Tên của bạn</label>
-                            <input type="text" name="customer_name" class="w-full border-none px-4 py-3 rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm" value="{{ old('customer_name') }}" required>
-                        </div>
-                        <div>
-                            <label class="block text-indigo-900 font-semibold mb-1">Chấm điểm (Sao)</label>
-                            <select name="rating" class="w-full border-none px-4 py-3 rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm text-yellow-500 font-bold" required>
-                                <option value="">Chọn số sao</option>
-                                <option value="5" {{ old('rating') == '5' ? 'selected' : '' }}>⭐⭐⭐⭐⭐ (Tuyệt vời)</option>
-                                <option value="4" {{ old('rating') == '4' ? 'selected' : '' }}>⭐⭐⭐⭐ (Rất tốt)</option>
-                                <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>⭐⭐⭐ (Bình thường)</option>
-                                <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>⭐⭐ (Kém)</option>
-                                <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>⭐ (Rất tệ)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-indigo-900 font-semibold mb-1">Cảm nhận của bạn</label>
-                            <textarea name="comment" rows="4" class="w-full border-none px-4 py-3 rounded-lg focus:ring-2 focus:ring-indigo-500 shadow-sm" placeholder="Giày đi rất êm chân..." required>{{ old('comment') }}</textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg">
-                            Gửi Đánh Giá
-                        </button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-</body>
-</html>

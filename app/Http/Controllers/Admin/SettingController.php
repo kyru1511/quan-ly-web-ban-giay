@@ -126,7 +126,7 @@ class SettingController extends Controller
             'hero_highlight' => 'nullable|string|max:255',
             'hero_subtitle' => 'nullable|string|max:500',
             'hero_cta_text' => 'nullable|string|max:100',
-            'hero_cta_link' => 'nullable|url|max:255',
+            'hero_cta_link' => 'nullable|string|max:255',
             'slides' => 'nullable|array|max:3',
             'slides.*.category' => 'nullable|string|max:100',
             'slides.*.badge' => 'nullable|string|max:100',
@@ -161,33 +161,43 @@ class SettingController extends Controller
             Setting::setValue('banner', '/storage/' . $bannerPath);
         }
 
-        // Cập nhật hero
-        $hero = [
-            'promo_text' => $request->input('hero_promo_text', '🚀 Khuyến mãi đặc biệt - Giảm 30%'),
-            'title' => $request->input('hero_title', 'Khám Phá Bộ Sưu Tập'),
-            'highlight' => $request->input('hero_highlight', 'Giày Sneaker'),
-            'subtitle' => $request->input('hero_subtitle', 'Chất lượng cao cấp, thiết kế thời trang và giá cả cạnh tranh. Cloudyy mang phong cách đến với mọi bước chân của bạn.'),
-            'cta_text' => $request->input('hero_cta_text', 'Mua Ngay'),
-            'cta_link' => $request->input('hero_cta_link', '#products'),
-        ];
-        Setting::setValue('home_hero', json_encode($hero), 'json');
-
-        // Cập nhật slide
-        $slides = [];
-        $slideInputs = $request->input('slides', []);
-        foreach ($slideInputs as $slideInput) {
-            $slides[] = [
-                'category' => $slideInput['category'] ?? '',
-                'badge' => $slideInput['badge'] ?? '',
-                'title' => $slideInput['title'] ?? '',
-                'subtitle' => $slideInput['subtitle'] ?? '',
-                'price_label' => $slideInput['price_label'] ?? '',
-                'price_value' => $slideInput['price_value'] ?? '',
-                'icon_class' => $slideInput['icon_class'] ?? '',
+        // Cập nhật hero nếu người dùng gửi dữ liệu hero
+        if ($request->hasAny(['hero_promo_text', 'hero_title', 'hero_highlight', 'hero_subtitle', 'hero_cta_text', 'hero_cta_link'])) {
+            $hero = json_decode(Setting::getValue('home_hero'), true) ?? [
+                'promo_text' => '🚀 Khuyến mãi đặc biệt - Giảm 30%',
+                'title' => 'Khám Phá Bộ Sưu Tập',
+                'highlight' => 'Giày Sneaker',
+                'subtitle' => 'Chất lượng cao cấp, thiết kế thời trang và giá cả cạnh tranh. Cloudyy mang phong cách đến với mọi bước chân của bạn.',
+                'cta_text' => 'Mua Ngay',
+                'cta_link' => '#products',
             ];
+
+            $hero['promo_text'] = $request->input('hero_promo_text', $hero['promo_text']);
+            $hero['title'] = $request->input('hero_title', $hero['title']);
+            $hero['highlight'] = $request->input('hero_highlight', $hero['highlight']);
+            $hero['subtitle'] = $request->input('hero_subtitle', $hero['subtitle']);
+            $hero['cta_text'] = $request->input('hero_cta_text', $hero['cta_text']);
+            $hero['cta_link'] = $request->input('hero_cta_link', $hero['cta_link']);
+
+            Setting::setValue('home_hero', json_encode($hero), 'json');
         }
 
-        if (!empty($slides)) {
+        // Cập nhật slide nếu gửi dữ liệu slide
+        if ($request->has('slides')) {
+            $slides = [];
+            $slideInputs = $request->input('slides', []);
+            foreach ($slideInputs as $slideInput) {
+                $slides[] = [
+                    'category' => $slideInput['category'] ?? '',
+                    'badge' => $slideInput['badge'] ?? '',
+                    'title' => $slideInput['title'] ?? '',
+                    'subtitle' => $slideInput['subtitle'] ?? '',
+                    'price_label' => $slideInput['price_label'] ?? '',
+                    'price_value' => $slideInput['price_value'] ?? '',
+                    'icon_class' => $slideInput['icon_class'] ?? '',
+                ];
+            }
+
             Setting::setValue('home_slides', json_encode($slides), 'json');
         }
 
