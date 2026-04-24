@@ -69,7 +69,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/products/store', [ProductController::class, 'store'])->name('admin.products.store');
     Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::put('/products/update/{id}', [ProductController::class, 'update'])->name('admin.products.update');
     Route::get('/products/delete/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 
     // Quản lý đơn hàng

@@ -12,18 +12,20 @@
         <div class="absolute bottom-16 left-16 w-10 h-10 bg-pink-300/20 rounded-full animate-ping"></div>
     </div>
     <div class="relative container mx-auto px-6">
-        <div class="flex items-center justify-center lg:justify-start gap-3 mb-8">
-            @if(!empty($logo))
-                <img src="{{ asset($logo) }}" alt="Cloudyy Logo" class="w-14 h-14 object-contain rounded-full border border-white/20 bg-white/10">
-            @endif
-            <div class="text-center lg:text-left">
-                <p class="text-sm uppercase tracking-[0.3em] text-white/80 font-semibold">Shop Cloudyy</p>
-                <h2 class="text-2xl md:text-3xl font-extrabold">Thương hiệu giày thời trang</h2>
-            </div>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 items-start mb-8">
+            <div class="relative lg:pr-6">
+                <div class="flex items-center gap-4 mb-6">
+                    @if(!empty($logo))
+                        <div class="w-16 h-16 rounded-3xl border border-white/20 bg-white/10 flex items-center justify-center">
+                            <img src="{{ asset($logo) }}" alt="Cloudyy Logo" class="w-12 h-12 object-contain rounded-full">
+                        </div>
+                    @endif
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.35em] text-white/70 font-semibold mb-1">Shop Cloudyy</p>
+                        <h2 class="text-2xl md:text-3xl font-extrabold">Thương hiệu giày thời trang</h2>
+                    </div>
+                </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div class="order-last lg:order-first text-center lg:text-left">
                 <div class="inline-flex items-center gap-3 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-5">
                     <span class="text-sm font-medium">{{ $hero['promo_text'] }}</span>
                 </div>
@@ -58,8 +60,8 @@
                     </div>
                 </div>
             </div>
-            <div class="order-first lg:order-last">
-                <div class="relative rounded-[2rem] bg-white/10 border border-white/20 backdrop-blur-xl p-5 shadow-2xl overflow-hidden">
+            <div class="order-first">
+                <div class="relative z-20 rounded-[2rem] bg-white/10 border border-white/20 backdrop-blur-xl p-5 shadow-2xl overflow-hidden">
                     <div class="flex items-center justify-between mb-5">
                         <div>
                             <p class="text-sm text-white/80">Bộ sưu tập nổi bật</p>

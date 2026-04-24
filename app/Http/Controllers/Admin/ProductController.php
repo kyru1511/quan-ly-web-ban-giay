@@ -32,7 +32,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'brand' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'description' => 'required'
         ]);
 
@@ -71,7 +71,7 @@ class ProductController extends Controller
             'category_id' => 'required',
             'brand' => 'required',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $data = $request->all();

@@ -43,14 +43,14 @@
 
             <div>
                 <label class="block text-gray-700 font-semibold mb-2">Giá bán (VNĐ)</label>
-                <input type="number" name="price" class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-indigo-500" placeholder="VD: 1500000" required>
+                <input type="text" name="price" value="{{ old('price') }}" inputmode="numeric" pattern="[0-9\.]*" class="price-input w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-indigo-500" placeholder="VD: 1.500.000" required>
             </div>
         </div>
 
         <div>
             <label class="block text-gray-700 font-semibold mb-2">Hình ảnh sản phẩm</label>
             <input type="file" name="image" accept="image/*" id="image-input" class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-indigo-500 bg-gray-50" onchange="previewImage(event)" required>
-            <p class="text-sm text-gray-500 mt-1">Định dạng: JPG, PNG, GIF. Kích thước tối đa: 2MB</p>
+            <p class="text-sm text-gray-500 mt-1">Định dạng: JPG, PNG, GIF, SVG, WebP. Kích thước tối đa: 2MB</p>
 
             <div id="image-preview" class="mt-4 hidden">
                 <p class="text-sm text-gray-600 mb-2">Preview ảnh:</p>
@@ -88,5 +88,31 @@ function previewImage(event) {
         preview.classList.add('hidden');
     }
 }
+
+function formatCurrency(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (!value) {
+        input.value = '';
+        return;
+    }
+    input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    const priceInput = document.querySelector('input[name="price"]');
+    const productForm = document.querySelector('form');
+
+    if (priceInput) {
+        priceInput.addEventListener('input', function() {
+            formatCurrency(this);
+        });
+    }
+
+    if (productForm && priceInput) {
+        productForm.addEventListener('submit', function() {
+            priceInput.value = priceInput.value.replace(/\./g, '');
+        });
+    }
+});
 </script>
 @endsection
