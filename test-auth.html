@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Đăng ký - SneakerHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
+        <div class="text-center mb-8">
+            <a href="/" class="text-4xl font-extrabold text-indigo-600">SNEAKER<span class="text-gray-800">HUB</span></a>
+            <p class="text-gray-500 mt-2 font-medium">Tạo tài khoản mới</p>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-blue-800 mb-2">🎉 Chức năng đăng ký đã hoàn thành!</h3>
+            <p class="text-blue-700 text-sm">Các tính năng đã được thêm vào:</p>
+            <ul class="text-blue-700 text-sm mt-2 space-y-1">
+                <li>• ✅ Trang đăng ký với form đầy đủ</li>
+                <li>• ✅ Xác thực dữ liệu (validation)</li>
+                <li>• ✅ Mã hóa mật khẩu (Hash)</li>
+                <li>• ✅ Phân quyền theo role (0=khách, 1=nhân viên, 2=admin)</li>
+                <li>• ✅ Tự động đăng nhập sau khi đăng ký</li>
+                <li>• ✅ Links giữa trang login và register</li>
+            </ul>
+        </div>
+
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-green-800 mb-2">👤 Tài khoản test có sẵn:</h3>
+            <div class="space-y-2 text-sm">
+                <div class="bg-white p-2 rounded border">
+                    <strong>Admin:</strong> admin@gmail.com / 123456
+                </div>
+                <div class="bg-white p-2 rounded border">
+                    <strong>Nhân viên:</strong> staff@gmail.com / 123456
+                </div>
+                <div class="bg-white p-2 rounded border">
+                    <strong>Khách hàng:</strong> customer@gmail.com / 123456
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <a href="/login" class="w-full bg-gray-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-gray-700 transition block text-center">
+                <i class="fas fa-sign-in-alt mr-2"></i>Đến trang đăng nhập
+            </a>
+
+            <a href="/register" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-indigo-700 transition block text-center">
+                <i class="fas fa-user-plus mr-2"></i>Đến trang đăng ký
+            </a>
+
+            <a href="/" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-green-700 transition block text-center">
+                <i class="fas fa-home mr-2"></i>Về trang chủ
+            </a>
+        </div>
+
+        <div class="mt-6 text-center">
+            <p class="text-gray-500 text-sm">
+                Để test đầy đủ, hãy khởi động server Laravel:<br>
+                <code class="bg-gray-100 px-2 py-1 rounded text-xs">php artisan serve</code>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

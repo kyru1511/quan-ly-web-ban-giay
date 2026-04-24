@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chatbot - Cloudyy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Chatbot AI</h1>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div id="messages" class="space-y-4 mb-4 max-h-96 overflow-y-auto"></div>
+
+            <div class="flex space-x-2">
+                <input type="text" id="message" placeholder="Nhập tin nhắn test..."
+                       class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button id="send" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                    Gửi
+                </button>
+            </div>
+
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Test cases:</strong></p>
+                <ul class="list-disc list-inside mt-2 space-y-1">
+                    <li>"xin chào" - chào hỏi</li>
+                    <li>"giá" - hỏi về giá</li>
+                    <li>"kích cỡ" - tư vấn size</li>
+                    <li>"giao hàng" - thông tin ship</li>
+                    <li>"đổi trả" - chính sách đổi trả</li>
+                    <li>"liên hệ" - thông tin liên hệ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messages = document.getElementById('messages');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+
+        function addMessage(text, isUser = false) {
+            const div = document.createElement('div');
+            div.className = `p-3 rounded-lg ${isUser ? 'bg-indigo-600 text-white ml-12' : 'bg-gray-200 text-gray-800 mr-12'}`;
+            div.textContent = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, true);
+            messageInput.value = '';
+
+            try {
+                const response = await fetch('/chat/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+                addMessage(data.message || 'Lỗi: ' + JSON.stringify(data));
+            } catch (error) {
+                addMessage('Lỗi kết nối: ' + error.message);
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

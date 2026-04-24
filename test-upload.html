@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Upload Ảnh - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-indigo-600">🎉 Chức năng Upload Ảnh đã hoàn thành!</h1>
+            <p class="text-gray-500 mt-2 font-medium">Các tính năng đã được thêm/cải thiện:</p>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-blue-800 mb-2">✅ Tính năng Upload Ảnh:</h3>
+            <ul class="text-blue-700 text-sm space-y-1">
+                <li>• 📁 Upload ảnh khi tạo sản phẩm mới</li>
+                <li>• ✏️ Chỉnh sửa ảnh khi cập nhật sản phẩm</li>
+                <li>• 🗑️ Tự động xóa ảnh cũ khi upload ảnh mới</li>
+                <li>• 👁️ Preview ảnh real-time khi chọn file</li>
+                <li>• 🖼️ Hiển thị ảnh hiện tại trong form edit</li>
+                <li>• 🗂️ Quản lý file ảnh trong storage/app/public/products</li>
+            </ul>
+        </div>
+
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <h3 class="font-bold text-green-800 mb-2">🔧 Files đã được cập nhật:</h3>
+            <div class="space-y-2 text-sm">
+                <div class="bg-white p-2 rounded border">
+                    <strong>Controller:</strong> ProductController.php (store, update, destroy)
+                </div>
+                <div class="bg-white p-2 rounded border">
+                    <strong>Views:</strong> create.blade.php, edit.blade.php, index.blade.php
+                </div>
+                <div class="bg-white p-2 rounded border">
+                    <strong>Storage:</strong> Symbolic link đã được tạo
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <a href="/admin/login" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-indigo-700 transition block text-center">
+                <i class="fas fa-sign-in-alt mr-2"></i>Đến trang đăng nhập Admin
+            </a>
+
+            <a href="/admin/products" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-blue-700 transition block text-center">
+                <i class="fas fa-list mr-2"></i>Đến trang quản lý sản phẩm
+            </a>
+
+            <a href="/" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-green-700 transition block text-center">
+                <i class="fas fa-home mr-2"></i>Về trang chủ
+            </a>
+        </div>
+
+        <div class="mt-6 text-center">
+            <p class="text-gray-500 text-sm">
+                Tài khoản test: <strong>admin@gmail.com</strong> / <strong>123456</strong>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
