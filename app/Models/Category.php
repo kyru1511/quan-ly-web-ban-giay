@@ -16,4 +16,10 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+
+    public function scopeShoe($query)
+    {
+        return $query->where('name', 'like', '%Giày%')
+                     ->orWhere('slug', 'like', 'giay%');
+    }
 }

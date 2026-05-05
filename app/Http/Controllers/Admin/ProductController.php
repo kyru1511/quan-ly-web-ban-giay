@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
@@ -13,14 +14,20 @@ class ProductController extends Controller
     // 1. Hiển thị danh sách sản phẩm
     public function index()
     {
-        $products = Product::with('category')->latest()->get();
+        $products = Product::with('category')
+            ->whereHas('category', function($q) {
+                $q->shoe();
+            })
+            ->latest()
+            ->get();
+
         return view('admin.products.index', compact('products'));
     }
 
     // 2. Hiển thị Form thêm sản phẩm
     public function create()
     {
-        $categories = Category::all(); 
+        $categories = Category::shoe()->get(); 
         return view('admin.products.create', compact('categories'));
     }
 
@@ -29,17 +36,26 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => [
+                'required',
+                Rule::exists('categories', 'id')->where(function ($query) {
+                    $query->where('name', 'like', '%Giày%')
+                          ->orWhere('slug', 'like', 'giay%');
+                }),
+            ],
             'brand' => 'required|string|max:255',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'description' => 'required'
+            'description' => 'required',
+            'colors' => 'nullable|string|max:255',
         ]);
 
         $imagePath = '';
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
+
+        $colors = array_values(array_filter(array_map('trim', explode(',', $request->input('colors', '')))));
 
         Product::create([
             'name' => $request->name,
@@ -48,6 +64,7 @@ class ProductController extends Controller
             'price' => $request->price,
             'image' => '/storage/' . $imagePath,
             'description' => $request->description,
+            'colors' => $colors,
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
@@ -57,7 +74,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        $categories = Category::all();
+        $categories = Category::shoe()->get();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -68,13 +85,21 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required',
+            'category_id' => [
+                'required',
+                Rule::exists('categories', 'id')->where(function ($query) {
+                    $query->where('name', 'like', '%Giày%')
+                          ->orWhere('slug', 'like', 'giay%');
+                }),
+            ],
             'brand' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'colors' => 'nullable|string|max:255',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['name', 'category_id', 'brand', 'price', 'description']);
+        $data['colors'] = array_values(array_filter(array_map('trim', explode(',', $request->input('colors', '')))));
 
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ nếu tồn tại
@@ -113,9 +138,19 @@ class ProductController extends Controller
     // 7. Hiển thị chi tiết sản phẩm (dùng cho người mua hàng)
     public function show($id)
     {
-        $product = Product::with('reviews')->findOrFail($id);
+        $product = Product::with(['reviews', 'category'])->findOrFail($id);
+
+        if (! $product->category || (!str_contains($product->category->slug, 'giay') && !str_contains($product->category->name, 'Giày'))) {
+            abort(404);
+        }
+
         $avgRating = $product->reviews->avg('rating') ?: 0;
 
-        return view('product_detail', compact('product', 'avgRating'));
+        $relatedProducts = Product::where('brand', $product->brand)
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get();
+
+        return view('product_detail', compact('product', 'avgRating', 'relatedProducts'));
     }
 }

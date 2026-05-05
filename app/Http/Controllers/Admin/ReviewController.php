@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    // Hi?n th? danh s�ch t?t c? reviews
+    // hien thi danh sachreviews
     public function index()
     {
         $reviews = Review::with("product")->latest()->paginate(20);
         return view("admin.reviews.index", compact("reviews"));
     }
 
-    // X�a review
+    // Xoa review
     public function destroy($id)
     {
         $review = Review::findOrFail($id);
@@ -24,7 +24,7 @@ class ReviewController extends Controller
         return redirect()->route("admin.reviews.index")->with("success", "Bình luận đã được xóa.");
     }
 
-    // Ch?nh s?a review
+    // Chinh sua review
     public function edit($id)
     {
         $review = Review::findOrFail($id);

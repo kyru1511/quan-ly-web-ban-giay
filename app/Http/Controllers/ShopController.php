@@ -12,12 +12,22 @@ class ShopController extends Controller
     public function show($id)
     {
         // Lấy sản phẩm kèm theo danh sách bình luận của nó
-        $product = Product::with('reviews')->findOrFail($id);
+        $product = Product::with(['reviews', 'category'])->findOrFail($id);
+
+        if (! $product->category || (!str_contains($product->category->slug, 'giay') && !str_contains($product->category->name, 'Giày'))) {
+            abort(404);
+        }
         
         // Tính điểm đánh giá trung bình
         $avgRating = $product->reviews->avg('rating') ?? 0;
 
-        return view('product_detail', compact('product', 'avgRating'));
+        // Sản phẩm cùng thương hiệu, không bao gồm sản phẩm hiện tại
+        $relatedProducts = Product::where('brand', $product->brand)
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get();
+
+        return view('product_detail', compact('product', 'avgRating', 'relatedProducts'));
     }
 
     // 2. Lưu bình luận của khách

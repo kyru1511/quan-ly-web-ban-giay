@@ -60,73 +60,6 @@
             </form>
         </div>
 
-        <!-- Banner Section -->
-        <div class="bg-gray-50 rounded-lg p-6">
-            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-images mr-2 text-green-600"></i>Banner Trang chủ
-            </h4>
-
-            @if($banner)
-                <div class="mb-4">
-                    <p class="text-sm text-gray-600 mb-2">Banner hiện tại:</p>
-                    <img id="current-banner" src="{{ asset($banner) }}" alt="Banner" class="w-full h-32 object-cover rounded-lg border border-gray-300">
-                </div>
-            @endif
-
-            <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">Upload Banner mới</label>
-                    <input type="file" name="banner" accept="image/*" id="banner-input" class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-green-500 bg-white" onchange="previewBanner(event)">
-                    <p class="text-sm text-gray-500 mt-1">Định dạng: JPG, PNG, GIF, WebP. Kích thước tối đa: 15MB. Khuyến nghị: 1200x400px</p>
-                </div>
-
-                <div id="banner-preview" class="mb-4 hidden">
-                    <p class="text-sm text-gray-600 mb-2">Banner mới sẽ được upload:</p>
-                    <img id="preview-banner" src="" alt="Preview Banner" class="w-full h-32 object-cover rounded-lg border border-gray-300">
-                </div>
-
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
-                    <i class="fas fa-save mr-2"></i>Cập nhật Banner
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div class="mt-8 bg-white rounded-xl shadow-sm p-8 border border-gray-200">
-        <div class="flex items-center justify-between mb-6 border-b pb-4">
-            <div>
-                <h3 class="text-2xl font-bold text-gray-800">Trang chủ & Hero</h3>
-                <p class="text-sm text-gray-600 mt-1">Thay đổi nội dung hero và slide ngay trên admin.</p>
-            </div>
-            <div class="text-sm text-gray-500">Sử dụng để cập nhật nhanh nội dung giới thiệu</div>
-        </div>
-
-        <form action="{{ route('admin.settings.update') }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Dòng quảng cáo nhỏ</label>
-                        <input type="text" name="hero_promo_text" value="{{ old('hero_promo_text', $hero['promo_text'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Tiêu đề chính</label>
-                        <input type="text" name="hero_title" value="{{ old('hero_title', $hero['title'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Từ nhấn mạnh</label>
-                        <input type="text" name="hero_highlight" value="{{ old('hero_highlight', $hero['highlight'] ?? '') }}" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Nội dung phụ</label>
-                        <textarea name="hero_subtitle" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500">{{ old('hero_subtitle', $hero['subtitle'] ?? '') }}</textarea>
-                    </div>
-                </div>
 
                 <div class="space-y-4">
                     <div>
@@ -141,6 +74,39 @@
                         <p class="text-sm text-gray-600">Lưu ý: Nếu để trống link, nút sẽ dẫn về trang chính.</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="mt-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4">QR thanh toán</h4>
+                <div class="grid gap-6 lg:grid-cols-2">
+                    <div class="bg-white p-4 rounded-xl border border-gray-200">
+                        <h5 class="font-semibold mb-3">QR ngân hàng</h5>
+                        @if(!empty($paymentQrBank))
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-2">QR ngân hàng hiện tại:</p>
+                                <img src="{{ str_contains($paymentQrBank, 'http') ? $paymentQrBank : asset($paymentQrBank) }}" alt="QR ngân hàng" class="w-48 h-48 object-contain rounded-lg border border-gray-300 bg-white">
+                            </div>
+                        @endif
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Upload QR ngân hàng mới</label>
+                            <input type="file" name="payment_qr_bank" accept="image/*" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 bg-white">
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-gray-200">
+                        <h5 class="font-semibold mb-3">QR MoMo</h5>
+                        @if(!empty($paymentQrMomo))
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-2">QR MoMo hiện tại:</p>
+                                <img src="{{ str_contains($paymentQrMomo, 'http') ? $paymentQrMomo : asset($paymentQrMomo) }}" alt="QR MoMo" class="w-48 h-48 object-contain rounded-lg border border-gray-300 bg-white">
+                            </div>
+                        @endif
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Upload QR MoMo mới</label>
+                            <input type="file" name="payment_qr_momo" accept="image/*" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 bg-white">
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">Định dạng: JPG, PNG, GIF, SVG, WebP. Kích thước tối đa: 10MB.</p>
             </div>
 
             <div class="mt-8">

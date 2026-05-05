@@ -186,11 +186,21 @@
                 <!-- Category Filter -->
                 <div class="flex-1 max-w-md">
                     <select name="category" class="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm appearance-none">
-                        <option value="">Tất cả danh mục</option>
+                        <option value="">Tất cả giày</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>
                                 {{ $category->name }}
                             </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Brand Filter -->
+                <div class="flex-1 max-w-md">
+                    <select name="brand" class="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm appearance-none">
+                        <option value="">Tất cả thương hiệu</option>
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand }}" {{ request('brand') == $brand ? 'selected' : '' }}>{{ $brand }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -209,7 +219,7 @@
             </form>
 
             <!-- Active Filters Display -->
-            @if(request('search') || request('category'))
+            @if(request('search') || request('category') || request('brand'))
                 <div class="mt-6 flex flex-wrap gap-3 justify-center">
                     @if(request('search'))
                         <span class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium">
@@ -227,6 +237,12 @@
                                 Danh mục: {{ $selectedCategory->name }}
                             </span>
                         @endif
+                    @endif
+                    @if(request('brand'))
+                        <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-medium">
+                            <i class="fas fa-star"></i>
+                            Thương hiệu: {{ request('brand') }}
+                        </span>
                     @endif
                 </div>
             @endif

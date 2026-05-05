@@ -16,30 +16,41 @@ class CartController extends Controller
     }
 
     // 2. Thêm sản phẩm vào giỏ hàng
-    public function add($id)
+    public function add(Request $request, $id)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để mua hàng.');
         }
 
         $product = Product::findOrFail($id);
-        $cart = session()->get('cart', []);
+        $color = $request->query('color');
+        if ($color && $product->colors && !in_array($color, $product->colors)) {
+            $color = null;
+        }
 
-        // Nếu sản phẩm đã có trong giỏ, tăng số lượng
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+        $cart = session()->get('cart', []);
+        $cartKey = $id . ($color ? '|' . $color : '');
+
+        if (isset($cart[$cartKey])) {
+            $cart[$cartKey]['quantity']++;
         } else {
-            // Nếu chưa có, thêm mới vào giỏ
-            $cart[$id] = [
-                "name" => $product->name,
-                "quantity" => 1,
-                "price" => $product->price,
-                "image" => $product->image
+            $cart[$cartKey] = [
+                'name' => $product->name,
+                'quantity' => 1,
+                'price' => $product->price,
+                'image' => $product->image,
+                'color' => $color,
             ];
         }
 
         session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Đã thêm ' . $product->name . ' vào giỏ hàng!');
+        $message = 'Đã thêm ' . $product->name;
+        if ($color) {
+            $message .= ' (' . $color . ')';
+        }
+        $message .= ' vào giỏ hàng!';
+
+        return redirect()->back()->with('success', $message);
     }
 
     // 3. Xóa sản phẩm khỏi giỏ

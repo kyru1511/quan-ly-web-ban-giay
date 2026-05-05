@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;       // Khai báo Model Order
 use App\Models\OrderItem;   // Khai báo Model OrderItem
+use App\Models\Setting;     // Lấy cài đặt QR thanh toán
 
 class CheckoutController extends Controller
 {
@@ -22,7 +23,10 @@ class CheckoutController extends Controller
             return redirect('/')->with('error', 'Giỏ hàng của bạn đang trống!');
         }
 
-        return view('checkout', compact('cart'));
+        $paymentQrBank = Setting::getValue('payment_qr_bank') ?? Setting::getValue('payment_qr');
+        $paymentQrMomo = Setting::getValue('payment_qr_momo') ?? Setting::getValue('payment_qr');
+
+        return view('checkout', compact('cart', 'paymentQrBank', 'paymentQrMomo'));
     }
 
     // Xử lý lưu đơn hàng

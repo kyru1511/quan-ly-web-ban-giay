@@ -26,6 +26,9 @@ class SettingController extends Controller
             'cta_link' => '#products',
         ];
 
+        $paymentQrBank = Setting::getValue('payment_qr_bank') ?? Setting::getValue('payment_qr');
+        $paymentQrMomo = Setting::getValue('payment_qr_momo') ?? Setting::getValue('payment_qr');
+
         $slides = json_decode(Setting::getValue('home_slides'), true) ?? [
             [
                 'category' => 'Sneaker',
@@ -56,7 +59,7 @@ class SettingController extends Controller
             ],
         ];
 
-        return view('admin.settings.index', compact('logo', 'banner', 'hero', 'slides'));
+        return view('admin.settings.index', compact('logo', 'banner', 'paymentQrBank', 'paymentQrMomo', 'hero', 'slides'));
     }
 
     /**
@@ -120,7 +123,9 @@ class SettingController extends Controller
     {
         $request->validate([
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
-            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:15360',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:15360',
+            'payment_qr_bank' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
+            'payment_qr_momo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             'hero_promo_text' => 'nullable|string|max:255',
             'hero_title' => 'nullable|string|max:255',
             'hero_highlight' => 'nullable|string|max:255',
@@ -159,6 +164,30 @@ class SettingController extends Controller
 
             $bannerPath = $request->file('banner')->store('banners', 'public');
             Setting::setValue('banner', '/storage/' . $bannerPath);
+        }
+
+        // Cập nhật QR thanh toán ngân hàng
+        if ($request->hasFile('payment_qr_bank')) {
+            $oldQrBank = Setting::getValue('payment_qr_bank');
+            if ($oldQrBank && !str_contains($oldQrBank, 'http')) {
+                $oldQrBankPath = str_replace('/storage/', '', $oldQrBank);
+                Storage::disk('public')->delete($oldQrBankPath);
+            }
+
+            $qrBankPath = $request->file('payment_qr_bank')->store('payment_qr/bank', 'public');
+            Setting::setValue('payment_qr_bank', '/storage/' . $qrBankPath);
+        }
+
+        // Cập nhật QR thanh toán MoMo
+        if ($request->hasFile('payment_qr_momo')) {
+            $oldQrMomo = Setting::getValue('payment_qr_momo');
+            if ($oldQrMomo && !str_contains($oldQrMomo, 'http')) {
+                $oldQrMomoPath = str_replace('/storage/', '', $oldQrMomo);
+                Storage::disk('public')->delete($oldQrMomoPath);
+            }
+
+            $qrMomoPath = $request->file('payment_qr_momo')->store('payment_qr/momo', 'public');
+            Setting::setValue('payment_qr_momo', '/storage/' . $qrMomoPath);
         }
 
         // Cập nhật hero nếu người dùng gửi dữ liệu hero

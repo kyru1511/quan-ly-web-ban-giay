@@ -109,16 +109,28 @@
                         </div>
                     </div>
 
-                    <!-- Add to Cart -->
-                    <div class="flex gap-4">
-                        <a href="{{ route('cart.add', $product->id) }}"
-                           class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-indigo-600 hover:to-purple-700 transition transform hover:scale-105 shadow-lg text-center">
-                            <i class="fas fa-cart-plus mr-2"></i>Thêm vào giỏ hàng
-                        </a>
-                        <button class="bg-gray-100 text-gray-700 p-4 rounded-2xl hover:bg-gray-200 transition">
-                            <i class="fas fa-heart text-xl"></i>
-                        </button>
-                    </div>
+                    <form action="{{ route('cart.add', $product->id) }}" method="GET" class="space-y-6">
+                        @if(!empty($product->colors) && count($product->colors))
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">Chọn màu</h3>
+                                <select name="color" class="w-full border border-gray-300 rounded-2xl px-4 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    @foreach($product->colors as $color)
+                                        <option value="{{ $color }}">{{ $color }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+
+                        <div class="flex gap-4">
+                            <button type="submit"
+                                   class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-indigo-600 hover:to-purple-700 transition transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-cart-plus mr-2"></i>Thêm vào giỏ hàng
+                            </button>
+                            <button type="button" class="bg-gray-100 text-gray-700 p-4 rounded-2xl hover:bg-gray-200 transition">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -242,13 +254,30 @@
 <!-- Related Products -->
 <section class="py-16 bg-white">
     <div class="container mx-auto px-6">
-        <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Sản phẩm liên quan</h2>
+        <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Sản phẩm cùng thương hiệu</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- This would be populated with related products in a real implementation -->
-            <div class="bg-gray-50 p-6 rounded-2xl text-center">
-                <i class="fas fa-shoe-prints text-6xl text-gray-300 mb-4"></i>
-                <h3 class="font-semibold text-gray-600">Sản phẩm liên quan sẽ hiển thị ở đây</h3>
-            </div>
+            @forelse($relatedProducts as $related)
+                <div class="bg-gray-50 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition">
+                    <a href="{{ route('product.detail', $related->id) }}" class="block">
+                        <div class="bg-white p-6 flex items-center justify-center min-h-[220px]">
+                            <img src="{{ $related->image }}" alt="{{ $related->name }}" class="max-h-40 object-contain">
+                        </div>
+                        <div class="p-6">
+                            <span class="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs uppercase tracking-wider mb-3">{{ $related->brand }}</span>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $related->name }}</h3>
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-xl font-bold text-indigo-600">{{ number_format($related->price, 0, ',', '.') }}₫</span>
+                                <span class="text-sm text-gray-500">{{ $related->category?->name ?? 'Giày' }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @empty
+                <div class="bg-gray-50 p-6 rounded-2xl text-center">
+                    <i class="fas fa-shoe-prints text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="font-semibold text-gray-600">Chưa có sản phẩm cùng thương hiệu</h3>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>

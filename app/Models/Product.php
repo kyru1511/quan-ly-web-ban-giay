@@ -9,7 +9,11 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'brand', 'price', 'image', 'category_id', 'description'];
+    protected $fillable = ['name', 'brand', 'price', 'image', 'category_id', 'description', 'colors'];
+
+    protected $casts = [
+        'colors' => 'array',
+    ];
 
     // Khai báo: 1 Sản phẩm thuộc 1 Danh mục
     public function category()

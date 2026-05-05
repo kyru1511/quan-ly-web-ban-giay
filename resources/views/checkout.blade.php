@@ -77,26 +77,32 @@
                         </div>
                         
                         <!-- Thông tin thanh toán bổ sung -->
-                        <div id="bank-info" class="hidden mt-4 p-4 border rounded-xl bg-blue-50">
+                                <div id="bank-info" class="hidden mt-4 p-4 border rounded-xl bg-blue-50">
                             <h4 class="font-semibold mb-2">Thông tin chuyển khoản</h4>
                             <p class="text-sm text-gray-700 mb-2">Vui lòng chuyển khoản đến tài khoản sau:</p>
-                            <div class="bg-white p-3 rounded border text-sm">
-                                <p><strong>Ngân hàng:</strong> Vietcombank</p>
-                                <p><strong>Số tài khoản:</strong> 1234567890</p>
-                                <p><strong>Chủ tài khoản:</strong> SNEAKERHUB</p>
-                                <p><strong>Nội dung:</strong> [Tên của bạn] - [Số điện thoại]</p>
+                            <div class="bg-white p-3 rounded border text-sm text-center">
+                            <p><strong>Nội dung:</strong> [Tên của bạn] - [Số điện thoại]</p>
                             </div>
-                            <p class="text-xs text-gray-600 mt-2">* Sau khi chuyển khoản, vui lòng gửi ảnh bill cho chúng tôi qua số điện thoại để xác nhận.</p>
+                            @if(!empty($paymentQrBank))
+                                <div class="mt-4 text-center">
+                                    <p class="text-sm text-gray-700 mb-2 font-semibold">Quét QR để thanh toán nhanh</p>
+                                    <img src="{{ str_contains($paymentQrBank, 'http') ? $paymentQrBank : asset($paymentQrBank) }}" alt="QR thanh toán ngân hàng" class="mx-auto w-64 h-64 object-contain rounded-xl border border-gray-300 bg-white">
+                                </div>
+                            @endif
                         </div>
                         
                         <div id="momo-info" class="hidden mt-4 p-4 border rounded-xl bg-pink-50">
                             <h4 class="font-semibold mb-2">Thanh toán MoMo</h4>
                             <p class="text-sm text-gray-700 mb-2">Quét mã QR hoặc chuyển khoản đến số MoMo:</p>
                             <div class="bg-white p-3 rounded border text-sm text-center">
-                                <p><strong>Số MoMo:</strong> 0123 456 789</p>
-                                <p><strong>Chủ tài khoản:</strong> SNEAKERHUB</p>
-                                <p class="mt-2 text-xs text-gray-600">* Gửi ảnh bill sau khi thanh toán</p>
+                            <p><strong>Nội dung:</strong> [Tên của bạn] - [Số điện thoại]</p>
                             </div>
+                            @if(!empty($paymentQrMomo))
+                                <div class="mt-4 text-center">
+                                    <p class="text-sm text-gray-700 mb-2 font-semibold">Quét QR để thanh toán nhanh</p>
+                                    <img src="{{ str_contains($paymentQrMomo, 'http') ? $paymentQrMomo : asset($paymentQrMomo) }}" alt="QR thanh toán MoMo" class="mx-auto w-64 h-64 object-contain rounded-xl border border-gray-300 bg-white">
+                                </div>
+                            @endif
                         </div>
                         
                         <div id="installment-info" class="hidden mt-4 p-4 border rounded-xl bg-green-50">

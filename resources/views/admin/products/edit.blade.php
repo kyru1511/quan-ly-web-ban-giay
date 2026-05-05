@@ -53,7 +53,12 @@
         </div>
 
         <div>
-            <label class="block text-gray-700 font-semibold mb-2">Hình ảnh sản phẩm</label>
+                <label class="block text-gray-700 font-semibold mb-2">Màu sắc (nếu có)</label>
+                <input type="text" name="colors" value="{{ old('colors', $product->colors ? implode(', ', $product->colors) : '') }}" class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:border-indigo-500" placeholder="VD: Trắng, Đen, Xanh" />
+                <p class="text-sm text-gray-500 mt-1">Nhập các màu cách nhau bằng dấu phẩy. Nếu sản phẩm chỉ có một màu mặc định thì để trống.</p>
+            </div>
+
+            <div>
 
             @if($product->image)
                 <div class="mb-4">

@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
+    @php
+        $cart = session('cart', []);
+        $cartCount = 0;
+        if (is_array($cart)) {
+            foreach ($cart as $item) {
+                $cartCount += $item['quantity'] ?? 0;
+            }
+        }
+    @endphp
+
     <header class="bg-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
@@ -32,6 +42,9 @@
                     </a>
                     <a href="{{ route('cart.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition relative group">
                         Giỏ hàng
+                        @if($cartCount > 0)
+                            <span class="absolute -top-2 right-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold">{{ $cartCount }}</span>
+                        @endif
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     @auth
@@ -84,8 +97,11 @@
                     <a href="#products" class="text-gray-700 hover:text-indigo-600 font-medium transition py-2">
                         <i class="fas fa-box mr-2"></i>Sản phẩm
                     </a>
-                    <a href="{{ route('cart.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition py-2">
+                    <a href="{{ route('cart.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition py-2 relative">
                         <i class="fas fa-shopping-cart mr-2"></i>Giỏ hàng
+                        @if($cartCount > 0)
+                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold">{{ $cartCount }}</span>
+                        @endif
                     </a>
                     @auth
                         <a href="{{ route('user.orders.index') }}" class="text-gray-700 hover:text-indigo-600 font-medium transition py-2">
@@ -116,6 +132,19 @@
             </div>
         </div>
     </header>
+
+    <div class="container mx-auto px-6 py-6">
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-200 text-green-800 px-6 py-4 rounded-xl shadow-sm mb-6">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-200 text-red-800 px-6 py-4 rounded-xl shadow-sm mb-6">
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
 
     <main class="container mx-auto px-6 py-10">
         @yield('content')

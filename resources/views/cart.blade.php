@@ -50,7 +50,12 @@
                                 <tr class="border-b last:border-0 hover:bg-gray-50 transition">
                                     <td class="py-4 flex items-center gap-4">
                                         <img src="{{ $details['image'] }}" class="w-20 h-20 rounded-xl object-cover shadow-sm">
-                                        <span class="font-bold text-gray-800 text-lg">{{ $details['name'] }}</span>
+                                        <div>
+                                            <div class="font-bold text-gray-800 text-lg">{{ $details['name'] }}</div>
+                                            @if(!empty($details['color']))
+                                                <div class="text-sm text-gray-500 mt-1">Màu: <span class="font-semibold text-gray-700">{{ $details['color'] }}</span></div>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="py-4 text-gray-600 font-medium">{{ number_format($details['price'], 0, ',', '.') }}₫</td>
                                     <td class="py-4">

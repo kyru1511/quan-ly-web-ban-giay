@@ -11,22 +11,33 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query();
+        $shoeCategoryQuery = Category::shoe();
+
+        $shoeCategorySlugs = $shoeCategoryQuery->pluck('slug')->toArray();
+        $query = Product::whereHas('category', function($q) {
+            $q->shoe();
+        });
 
         // Tìm kiếm theo tên
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Lọc theo loại (Giày, Dép, Túi...)
-        if ($request->has('category')) {
+        // Lọc theo danh mục giày
+        if ($request->filled('category') && in_array($request->category, $shoeCategorySlugs)) {
             $query->whereHas('category', function($q) use ($request) {
                 $q->where('slug', $request->category);
             });
         }
 
+        // Lọc theo thương hiệu
+        $brands = ['Nike', 'Puma', 'Adidas', 'Vans', 'Converse', 'Richowen'];
+        if ($request->filled('brand') && in_array($request->brand, $brands)) {
+            $query->where('brand', $request->brand);
+        }
+
         $products = $query->get();
-        $categories = Category::all(); // Lấy các loại để hiển thị menu
+        $categories = $shoeCategoryQuery->get(); // Chỉ hiển thị danh mục giày
         $logo = Setting::getValue('logo');
         $banner = Setting::getValue('banner', 'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=1200&q=80');
 
@@ -69,6 +80,6 @@ class HomeController extends Controller
             ],
         ];
 
-        return view('home', compact('products', 'categories', 'logo', 'banner', 'hero', 'slides'));
+        return view('home', compact('products', 'categories', 'brands', 'logo', 'banner', 'hero', 'slides'));
     }
 }
